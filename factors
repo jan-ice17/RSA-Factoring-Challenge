@@ -1,34 +1,29 @@
 #!/usr/bin/python3
-import signal
-from sys import argv  #imports an argv 4 command line args
+"""Factorize as many numbers as possible into a product of two smaller numbers.
+"""
 
-# Function to factorize a given value
-def factorize(value):
-    i = 2  # Start from 2 as it's the smallest prime number
-    while value % i:  # Increment the  i until it divides value without a rem.
-        i += 1
-    # Print the factorization in the format n=p*q
-    print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
+import sys
+import math
 
-# Function to handle the alarm signal
-def handler(signum, frame):
-    raise Exception("Time limit exceeded")
 
-# Set a signal handler and a 5-second alarm
-signal.signal(signal.SIGALRM, handler)
-signal.alarm(5)
-
-# Check if the number of command line arguments is correct
-if len(argv) != 2:
-    exit()  # Exit if the number of arguments is not correct
-
-# Try open the file and read its lines
 try:
-    with open(argv[1]) as file:  # Open the file given as command line argument
-        line = file.readline()  # Read 1st line
-        while line != "":  # Continue until there is no more lines
-            value = int(line.split('\n')[0])  # Convert line to an integer
-            factorize(value)  # Factorize the value
-            line = file.readline()  # Read nxt line
-except Exception as e:
-    print(e)
+    file_object = open(sys.argv[1], "r")
+except IndexError:
+    print("Usage: ./factors <file>")
+    exit()
+
+numbers = file_object.readlines()
+file_object.close()
+
+for num in numbers:
+    number = int(num.rstrip("\n"))
+    for i in range(2, int(math.sqrt(number)) + 1):
+        if number % i == 0:
+            q = i
+            break
+    for j in range(2, int(math.sqrt(number)) + 1):
+        if (number // i) * q == number:
+            p = number // i
+            break
+
+    print("{}={}*{}".format(number, p, q))
