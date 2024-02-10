@@ -1,31 +1,25 @@
 #!/usr/bin/python3
-from sys import argv
+from sys import argv  #imports an argv 4 command line args
 
-
+# Function to factorize a given value
 def factorize(value):
-    """"print a simple descomposition of an integer > 1"""
-    i = 2
-
-    if value < 2:
-        return
-    print()
-    print(value, "<- value-bef")
-    while value % i:
+    i = 2  # Start from 2 as it's the smallest prime number
+    while value % i:  # Increment the  i until it divides value without a rem.
         i += 1
+    # Print the factorization in the format n=p*q
     print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
-    print(value, "<- value-aft")
-    print()
 
+# Check if the number of command line arguments is correct
 if len(argv) != 2:
-    exit()
+    exit()  # Exit if the number of arguments is not correct
 
+# Try to open the file and read its lines
 try:
-    with open(argv[1]) as file:
-        line = file.readline()
-
-        while line != "":
-            value = int(line.split('\n')[0])
-            factorize(value)
-            line = file.readline()
+    with open(argv[1]) as file:  # Open the file given as command line argument
+        line = file.readline()  # Read 1st line
+        while line != "":  # Continue until there is no more lines
+            value = int(line.split('\n')[0])  # Convert line to an integer
+            factorize(value)  # Factorize the value
+            line = file.readline()  # Read nxt line
 except:
     pass
