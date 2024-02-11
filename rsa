@@ -1,23 +1,50 @@
-import math
+#!/usr/bin/python3
 
-def gcd(a, b):
-    while b != 0:
-        a, b = b, a % b
-    return a
+# Import sys module to get command line arguments
+import sys
 
-def pollards_rho(n):
-    if n % 2 == 0:
-        return 2
-    x = 2; y = 2; d = 1
-    f = lambda x: (x**2 + 1) % n
-    while d == 1:
-        x = f(x)
-        y = f(f(y))
-        d = gcd(abs(x-y), n)
-    return d
+# Function to factorize the number
+def fc():
+    """
+    Function that will search file to convert number and format n=p*q
+    """
+    try:
+        # Get the file name from command line arguments
+        revfile = sys.argv[1]
+        
+        # Open the file
+        with open(revfile) as f:
+            
+            # Loop through each line in the file
+            for revnumber in f:
+                
+                # Convert the line to an integer
+                revnumber = int(revnumber)
+                
+                # If the number is even, print it as n=2*(n/2)
+                if revnumber % 2 == 0:
+                    print("{}={}*{}".format(revnumber, revnumber // 2, 2))
+                    continue
+                
+                # Start from 3 and try to divide the number
+                i = 3
+                while i < revnumber // 2:
+                    
+                    # If the number is divisible by i, print it as n=i*(n/i)
+                    if revnumber % i == 0:
+                        print("{}={}*{}".format(revnumber, revnumber // i, i))
+                        break
+                    
+                    # Increment i by 2 (since even numbers can't be prime)
+                    i = i + 2
+                
+                # If no factors found, print it as n=n*1
+                if i == (revnumber // 2) + 1:
+                    print("{}={}*{}".format(revnumber, revnumber, 1))
+    
+    
+    except (IndexError):
+        pass
 
-def rsa_factor_ing(n):
-    factor = pollards_rho(n)
-    return factor, n // factor
-
-print(rsa_factor_ing(2497885147362973))  # The expaected Output: (49979141, 49978553)
+# Call the function
+fc()
